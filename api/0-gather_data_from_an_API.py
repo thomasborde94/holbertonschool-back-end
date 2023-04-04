@@ -1,41 +1,38 @@
 #!/usr/bin/python3
-"""using a rest API, for a given employee ID, returns
-information about his/her TODO list progress
-"""
-import requests
+""" module use urllib or requests api """
+
+from requests import get
 from sys import argv
 
 
 if __name__ == "__main__":
 
+    # First we connect/open/read/loads to the data url users
+    url_first = get('https://jsonplaceholder.typicode.com/todos/')
+    data_url_first = url_first.json()
+    completed = 0
     TOTAL_NUMBER_OF_TASKS = 0
-    NUMBER_OF_DONE_TASKS = 0
-    TASK_TITLE = []
-    # collects todos infos in a dict
-    r_todos = requests.get('https://jsonplaceholder.typicode.com/todos/')
-    data_todos = r_todos.json()
+    NUMBER_OF_DONE_TASKS = []
 
-    # collect users infos in a dict
-    r_users = requests.get('https://jsonplaceholder.typicode.com/users/')
-    data_users = r_users.json()
+    # Second we connect/open/read/loads to the data url todos
+    url_second = get('https://jsonplaceholder.typicode.com/users/')
+    data_url_second = url_second.json()
 
-    for i in data_todos:
-        # check how many total tasks there are for the given user id
-        if i.get("userId") == int(argv[1]):
+    for i in data_url_first:
+        if i.get('userId') == int(argv[1]):
             TOTAL_NUMBER_OF_TASKS += 1
-            # check how many tasks he has done
-            if i.get("completed") is True:
-                NUMBER_OF_DONE_TASKS += 1
-                # appends the title of the completed task to a list
-                TASK_TITLE.append(i.get("title"))
 
-    # collect the name of the employee
-    for i in data_users:
-        if i.get("id") == int(argv[1]):
-            employee = i.get("name")
+            if i.get('completed') is True:
+                completed += 1
+                NUMBER_OF_DONE_TASKS.append(i.get('title'))
 
-    # print result to the correct format
+    for i in data_url_second:
+        if i.get('id') == int(argv[1]):
+            employee = i.get('name')
+
+    # Format the name of the completed tasks
     print("Employee {} is done with tasks({}/{}):".format(
-        employee, NUMBER_OF_DONE_TASKS, TOTAL_NUMBER_OF_TASKS))
-    for titles in TASK_TITLE:
-        print("\t {}".format(titles))
+        employee, completed, TOTAL_NUMBER_OF_TASKS))
+
+    for NUMBER_OF_DONE_TASKS in NUMBER_OF_DONE_TASKS:
+        print("\t {}".format(NUMBER_OF_DONE_TASKS))
