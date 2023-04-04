@@ -8,7 +8,6 @@ from sys import argv
 
 if __name__ == "__main__":
 
-    
     # collects todos infos in a dict
     r_todos = requests.get('https://jsonplaceholder.typicode.com/todos/')
     data_todos = r_todos.json()
