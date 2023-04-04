@@ -2,7 +2,7 @@
 """using a rest API, for a given employee ID, returns
 information about his/her TODO list progress
 """
-import rfromequ
+import requests
 from sys import argv
 
 
